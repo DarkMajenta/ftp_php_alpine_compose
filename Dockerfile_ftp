@@ -1,0 +1,15 @@
+# Use an official Vsftpd image as the base image
+FROM vsftpd:latest
+
+# Create a directory for the user list and the script
+RUN mkdir -p /config
+
+# Copy the user list file and the setup script to the container
+COPY users.txt /config/
+COPY setup.sh /config/
+
+# Change the ownership of the files to the vsftpd user
+RUN chown vsftpd:vsftpd /config/*
+
+# Set the entrypoint to run the setup script on container startup
+ENTRYPOINT ["sh", "/config/setup.sh"]
