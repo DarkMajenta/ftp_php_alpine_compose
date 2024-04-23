@@ -1,0 +1,26 @@
+# Use an official PHP image as the base image
+FROM php:8.2-fpm-alpine
+
+# Create a directory for the shared volume
+RUN mkdir -p /app
+
+# Set the working directory
+WORKDIR /app
+
+# Define the volumes
+VOLUME ["/ftproot", "/projects", "/template"]
+
+# Install necessary PHP extensions
+RUN docker-php-ext-install mysqli pdo_mysql && docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd
+
+# Copy the entrypoint script to the container
+COPY entrypoint.sh /entrypoint.sh
+
+# Change the ownership of the script to the root user
+RUN chown root:root /entrypoint.sh
+
+# Set the entrypoint script as executable
+RUN chmod +x /entrypoint.sh
+
+# Set the entrypoint to run the entrypoint script on container startup
+ENTRYPOINT ["/entrypoint.sh"]
