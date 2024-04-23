@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  ftp:
+    image: vsftpd:latest
+    volumes:
+      - ./ftproot:/ftproot
+      - ./users.txt:/ftproot/users.txt
+    restart: always
+    ports:
+      - "21:21"
+
+  php:
+    build: .
+    volumes:
+      - ./ftproot:/ftproot
+      - ./projects:/projects
+      - ./template:/template
+    restart: always
+    depends_on:
+      - ftp
