@@ -16,6 +16,8 @@ services:
       - ./ftproot:/ftproot
       - ./projects:/projects
       - ./template:/template
+    ports:
+      - "80:80"
     restart: always
     depends_on:
       - ftp
